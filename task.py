@@ -1,7 +1,6 @@
 import mysql.connector
 import secret
-import ResquestOpenAPI
-
+import ResquestOpenAPI, tag_classification
 
 def get_total_board_number():
     # database 연결
