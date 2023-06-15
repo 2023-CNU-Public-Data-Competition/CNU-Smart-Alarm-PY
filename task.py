@@ -74,6 +74,33 @@ def update_last_board_id(total_board_list):
     DB.close()
 
 
+def insert_new_post(update_list):
+    # database 연결
+    DB = mysql.connector.connect(
+        host=secret.db_host,
+        user=secret.db_user,
+        password=secret.db_password,
+        database=secret.db_name
+    )
+    cursor = DB.cursor()
+    print("시작")
+
+    for item in update_list:
+        for _item in item['update_article']:
+            print(_item['article_title'])
+            tag = tag_classification(_item['article_title'])
+            print(tag)
+            import datetime
+            current_date = datetime.date.today()
+            query = "INSERT INTO post (article_no, category_no, article_title, article_text, writer_nm, click_cnt, attach_cnt, update_dt, tag) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            data = (int(_item['article_no']), int(item['category_no']), _item['article_title'], _item['article_text'],
+                    _item['writer_nm'], int(_item['click_cnt']), int(_item['attach_cnt']), current_date, tag)
+            cursor.execute(query, data)
+            DB.commit()
+    cursor.close()
+    DB.close()
+
+
 if __name__ == "__main__":
     # category별 total board id list
     # (카테고리 넘버, 보드 넘버, 최신 업데이트 게시글 넘버)
@@ -84,3 +111,5 @@ if __name__ == "__main__":
     update_list, total_board_list = ResquestOpenAPI.call_openAPI(total_board_list, user_selected_board_id_list)
     # 전체 board의 최근 업데이트 보드 넘버 update
     update_last_board_id(total_board_list)
+    # update_list에 해당하는 post table insert
+    insert_new_post(update_list)
