@@ -110,7 +110,7 @@ def get_user_check_alarm(user_id):
     return user_alarm_dict
 
 
-if __name__ == "__main__":
+def task():
     # category별 total board id list
     # (카테고리 넘버, 보드 넘버, 최신 업데이트 게시글 넘버)
     total_board_list = get_total_board_number()
@@ -124,3 +124,5 @@ if __name__ == "__main__":
     insertDBtask.insert_new_post(update_list)
     # 사용자별 알람
     insertDBtask.insert_new_alarm(update_list)
+
+    print("작업 완료")
