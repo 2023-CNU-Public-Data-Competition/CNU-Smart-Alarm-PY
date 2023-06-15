@@ -1,7 +1,7 @@
 import mysql.connector
 import secret
-import requests
-import json
+import ResquestOpenAPI
+
 
 def get_total_board_number():
     # database 연결
@@ -59,3 +59,5 @@ if __name__ == "__main__":
     total_board_list = get_total_board_number()
     # user들이 선택한 board id list
     user_selected_board_id_list = get_selected_board_number()
+    # open API 호출
+    update_list, total_board_list = ResquestOpenAPI.call_openAPI(total_board_list, user_selected_board_id_list)
