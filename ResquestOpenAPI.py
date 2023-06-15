@@ -45,7 +45,31 @@ def call_openAPI(total_board_list, user_selected_board_id_list):
                 # 추후 category_board_number table update 위해 last_board_no update
                 board_item[2] = api_article_last_no
                 print(board_no, 'update')
-
+                # 사용자들이 선택한 카테고리에 해당하는 보드라면 update list에 추가
+                if board_no in user_selected_board_id_list:
+                    update_list_item['category_no'] = category_no
+                    cnt = 0
+                    for article_item in data['RESULT']:
+                        article_info = {
+                            "article_no": 0,
+                            "article_title": "null",
+                            "article_text": "null",
+                            "writer_nm": "null",
+                            "click_cnt": 0,
+                            "attach_cnt": 0,
+                        }
+                        if (int)(article_item['article_no']) == db_article_last_no:
+                            break
+                        cnt = cnt + 1
+                        article_info['article_no'] = article_item['article_no']
+                        article_info['article_title'] = article_item['article_title']
+                        article_info['article_text'] = article_item['article_text']
+                        article_info['writer_nm'] = article_item['writer_nm']
+                        article_info['click_cnt'] = article_item['click_cnt']
+                        article_info['attach_cnt'] = article_item['attach_cnt']
+                        update_list_item['update_article'].append(article_info)
+                    update_list_item['update_cnt'] = cnt
+                    update_list.append(update_list_item)
 
         else:
             print("api SERVER ERROR")
